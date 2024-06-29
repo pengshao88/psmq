@@ -2,6 +2,7 @@ package cn.pengshao.mq.core;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @Author: yezp
  * @date 2024/6/27 22:56
  */
+@Slf4j
 @AllArgsConstructor
 public class PsMq {
 
@@ -27,6 +29,7 @@ public class PsMq {
 
     public boolean send(PsMessage message) {
         boolean offered = queue.offer(message);
+        log.info("send topic:{}, message:{}", topic, message);
         listeners.forEach(listener -> listener.onMessage(message));
         return offered;
     }
