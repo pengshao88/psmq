@@ -1,5 +1,7 @@
 package cn.pengshao.mq.core;
 
+import cn.pengshao.mq.model.PsMessage;
+
 /**
  * message listener
  * push model

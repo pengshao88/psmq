@@ -1,6 +1,7 @@
 package cn.pengshao.mq.demo;
 
 import cn.pengshao.mq.core.*;
+import cn.pengshao.mq.model.PsMessage;
 
 import java.io.IOException;
 

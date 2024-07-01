@@ -1,7 +1,6 @@
 package cn.pengshao.mq.core;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import cn.pengshao.mq.model.PsMessage;
 import lombok.extern.slf4j.Slf4j;
 
 /**
