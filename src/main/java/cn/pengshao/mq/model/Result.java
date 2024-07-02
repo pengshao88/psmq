@@ -31,6 +31,10 @@ public class Result<T> {
         return new Result<>(SUCCESS, PsMessage.create(msg, null));
     }
 
+    public static Result<PsMessage<?>> msg(PsMessage<?> msg) {
+        return new Result<>(SUCCESS, msg);
+    }
+
     public static Result<String> fail() {
         return new Result<>(FAIL, "FAIL");
     }

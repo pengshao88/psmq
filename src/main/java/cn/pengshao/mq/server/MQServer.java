@@ -21,31 +21,33 @@ public class MQServer {
     public Result<String> send(@RequestParam("topic") String topic,
                                @RequestParam("cid") String consumerId,
                                @RequestBody PsMessage<String> message) {
-        return Result.ok();
+        return Result.ok("" + MessageQueue.send(topic, consumerId, message));
     }
 
     @RequestMapping("/recv")
     public Result<PsMessage<?>> recv(@RequestParam("topic") String topic,
                                      @RequestParam("cid") String consumerId) {
-        return Result.msg("");
+        return Result.msg(MessageQueue.recv(topic, consumerId));
     }
 
     @RequestMapping("/ack")
     public Result<String> ack(@RequestParam("topic") String topic,
                               @RequestParam("cid") String consumerId,
                               @RequestParam("offset") Integer offset) {
-        return Result.ok();
+        return Result.ok("" + MessageQueue.ack(topic, consumerId, offset));
     }
 
     @RequestMapping("/sub")
     public Result<String> subscribe(@RequestParam("topic") String topic,
                               @RequestParam("cid") String consumerId) {
+        MessageQueue.sub(new MessageSubscription(topic, consumerId, -1));
         return Result.ok();
     }
 
     @RequestMapping("/unsub")
     public Result<String> unsubscribe(@RequestParam("topic") String topic,
                                 @RequestParam("cid") String consumerId) {
+        MessageQueue.unsub(new MessageSubscription(topic, consumerId, -1));
         return Result.ok();
     }
 
