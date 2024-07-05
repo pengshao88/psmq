@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PsMessage<T> {
+public class Message<T> {
 
     static AtomicLong idGenerate = new AtomicLong(0);
     private long id;
@@ -28,8 +28,8 @@ public class PsMessage<T> {
         return idGenerate.getAndIncrement();
     }
 
-    public static PsMessage<?> create(String body, Map<String, String> headers) {
-        return new PsMessage<>(getId(), body, headers);
+    public static Message<?> create(String body, Map<String, String> headers) {
+        return new Message<>(getId(), body, headers);
     }
 
 }

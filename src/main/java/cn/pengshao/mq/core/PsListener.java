@@ -1,6 +1,6 @@
 package cn.pengshao.mq.core;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 
 /**
  * message listener
@@ -11,6 +11,6 @@ import cn.pengshao.mq.model.PsMessage;
  */
 public interface PsListener<T> {
 
-    void onMessage(PsMessage<T> message);
+    void onMessage(Message<T> message);
 
 }

@@ -27,11 +27,11 @@ public class Result<T> {
         return new Result<>(SUCCESS, msg);
     }
 
-    public static Result<PsMessage<?>> msg(String msg) {
-        return new Result<>(SUCCESS, PsMessage.create(msg, null));
+    public static Result<Message<?>> msg(String msg) {
+        return new Result<>(SUCCESS, Message.create(msg, null));
     }
 
-    public static Result<PsMessage<?>> msg(PsMessage<?> msg) {
+    public static Result<Message<?>> msg(Message<?> msg) {
         return new Result<>(SUCCESS, msg);
     }
 

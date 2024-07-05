@@ -1,6 +1,6 @@
 package cn.pengshao.mq.core;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -20,7 +20,7 @@ public class PsConsumer {
         this.broker = broker;
     }
 
-    public <T> PsMessage<T> poll(long timeout) {
+    public <T> Message<T> poll(long timeout) {
         return mq.poll(timeout);
     }
 

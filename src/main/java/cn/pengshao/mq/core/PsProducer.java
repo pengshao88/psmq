@@ -1,6 +1,6 @@
 package cn.pengshao.mq.core;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ public class PsProducer {
 
     private PsBroker broker;
 
-    public boolean send(String topic, PsMessage message) {
+    public boolean send(String topic, Message message) {
         PsMq psMq = broker.findMq(topic);
         if (psMq == null) {
             throw new RuntimeException("topic not found");

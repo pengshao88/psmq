@@ -1,6 +1,6 @@
 package cn.pengshao.mq.server;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 import cn.pengshao.mq.model.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +20,13 @@ public class MQServer {
     @RequestMapping("/send")
     public Result<String> send(@RequestParam("topic") String topic,
                                @RequestParam("cid") String consumerId,
-                               @RequestBody PsMessage<String> message) {
+                               @RequestBody Message<String> message) {
         return Result.ok("" + MessageQueue.send(topic, consumerId, message));
     }
 
     @RequestMapping("/recv")
-    public Result<PsMessage<?>> recv(@RequestParam("topic") String topic,
-                                     @RequestParam("cid") String consumerId) {
+    public Result<Message<?>> recv(@RequestParam("topic") String topic,
+                                   @RequestParam("cid") String consumerId) {
         return Result.msg(MessageQueue.recv(topic, consumerId));
     }
 

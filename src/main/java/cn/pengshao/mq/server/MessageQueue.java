@@ -1,6 +1,6 @@
 package cn.pengshao.mq.server;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +21,14 @@ public class MessageQueue {
 
     private final String topic;
     private int index = 0;
-    private final PsMessage<?>[] queue = new PsMessage[1024 * 10];
+    private final Message<?>[] queue = new Message[1024 * 10];
     private final Map<String, MessageSubscription> subscriptions = new HashMap<>();
 
     public MessageQueue(String topic) {
         this.topic = topic;
     }
 
-    public int send(PsMessage<?> message) {
+    public int send(Message<?> message) {
         if (index >= queue.length) {
             return -1;
         }
@@ -37,7 +37,7 @@ public class MessageQueue {
         return index;
     }
 
-    public PsMessage<?> recv(int ind) {
+    public Message<?> recv(int ind) {
         if (ind <= index) {
             return queue[ind];
         }
@@ -70,7 +70,7 @@ public class MessageQueue {
         messageQueue.unsubscribe(subscription);
     }
 
-    public static int send(String topic, String consumerId, PsMessage<String> message) {
+    public static int send(String topic, String consumerId, Message<String> message) {
         MessageQueue messageQueue = QUEUE_MAP.get(topic);
         if (messageQueue == null) {
             throw new RuntimeException("topic not found");
@@ -78,7 +78,7 @@ public class MessageQueue {
         return messageQueue.send(message);
     }
 
-    public static PsMessage<?> recv(String topic, String consumerId, int ind) {
+    public static Message<?> recv(String topic, String consumerId, int ind) {
         MessageQueue messageQueue = QUEUE_MAP.get(topic);
         if (messageQueue == null) {
             throw new RuntimeException("topic not found");
@@ -91,7 +91,7 @@ public class MessageQueue {
                 + topic + "/" + consumerId);
     }
 
-    public static PsMessage<?> recv(String topic, String consumerId) {
+    public static Message<?> recv(String topic, String consumerId) {
         MessageQueue messageQueue = QUEUE_MAP.get(topic);
         if (messageQueue == null) {
             throw new RuntimeException("topic not found");

@@ -1,6 +1,6 @@
 package cn.pengshao.mq.core;
 
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +21,14 @@ import java.util.concurrent.TimeUnit;
 public class PsMq {
 
     private String topic;
-    private LinkedBlockingQueue<PsMessage> queue = new LinkedBlockingQueue<>();
+    private LinkedBlockingQueue<Message> queue = new LinkedBlockingQueue<>();
     private List<PsListener> listeners = new ArrayList<>();
 
     public PsMq(String topic) {
         this.topic = topic;
     }
 
-    public boolean send(PsMessage message) {
+    public boolean send(Message message) {
         boolean offered = queue.offer(message);
         log.info("send topic:{}, message:{}", topic, message);
         listeners.forEach(listener -> listener.onMessage(message));
@@ -43,7 +43,7 @@ public class PsMq {
      * @param <T> 泛型
      */
     @SneakyThrows
-    public <T> PsMessage<T> poll(long timeout) {
+    public <T> Message<T> poll(long timeout) {
         return queue.poll(timeout, TimeUnit.MILLISECONDS);
     }
 

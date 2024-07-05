@@ -1,7 +1,7 @@
 package cn.pengshao.mq.demo;
 
 import cn.pengshao.mq.core.*;
-import cn.pengshao.mq.model.PsMessage;
+import cn.pengshao.mq.model.Message;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ public class PsMqDemo {
         PsProducer producer = broker.createProducer();
         for (int i = 0; i < 10; i++) {
             Order order = new Order(ids, "item" + i, 100.0 * i);
-            producer.send("order", new PsMessage<>(ids++, order, null));
+            producer.send("order", new Message<>(ids++, order, null));
         }
 
         PsConsumer consumer = broker.createConsumer(topic);
@@ -39,17 +39,17 @@ public class PsMqDemo {
             }
             if (c == 'p') {
                 Order order = new Order(ids, "item" + ids, 100 * ids);
-                producer.send(topic, new PsMessage<>(ids ++, order, null));
+                producer.send(topic, new Message<>(ids ++, order, null));
                 System.out.println("send ok => " + order);
             }
             if (c == 'c') {
-                PsMessage<Order> message = consumer.poll(1000);
+                Message<Order> message = consumer.poll(1000);
                 System.out.println("poll ok => " + message);
             }
             if (c == 'a') {
                 for (int i = 0; i < 10; i++) {
                     Order order = new Order(ids, "item" + ids, 100 * ids);
-                    producer.send(topic, new PsMessage<>(ids ++, order, null));
+                    producer.send(topic, new Message<>(ids ++, order, null));
                 }
                 System.out.println("send 10 orders...");
             }
