@@ -4,6 +4,8 @@ import cn.pengshao.mq.ResultCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Result for MQServer.
  *
@@ -30,6 +32,10 @@ public class Result<T> {
     }
 
     public static Result<Message<?>> msg(Message<?> msg) {
+        return new Result<>(ResultCode.SUCCESS.getCode(), msg);
+    }
+
+    public static Result<List<Message<?>>> msg(List<Message<?>> msg) {
         return new Result<>(ResultCode.SUCCESS.getCode(), msg);
     }
 

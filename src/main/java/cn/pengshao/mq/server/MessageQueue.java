@@ -1,8 +1,11 @@
 package cn.pengshao.mq.server;
 
 import cn.pengshao.mq.model.Message;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,6 +14,7 @@ import java.util.Map;
  * @Author: yezp
  * @date 2024/7/1 22:40
  */
+@Slf4j
 public class MessageQueue {
 
     public static final Map<String, MessageQueue> QUEUE_MAP = new HashMap<>();
@@ -26,6 +30,33 @@ public class MessageQueue {
 
     public MessageQueue(String topic) {
         this.topic = topic;
+    }
+
+    public static List<Message<?>> batch(String topic, String consumerId, int size) {
+        MessageQueue messageQueue = QUEUE_MAP.get(topic);
+        if (messageQueue == null) {
+            throw new RuntimeException("topic not found");
+        }
+
+        if (messageQueue.subscriptions.containsKey(consumerId)) {
+            int ind = messageQueue.subscriptions.get(consumerId).getOffset();
+            int offset = ind + 1;
+            List<Message<?>> result = new ArrayList<>();
+            Message<?> recv = messageQueue.recv(offset);
+            while (recv != null) {
+                result.add(recv);
+                if (result.size() >= size) {
+                    break;
+                }
+
+                offset++;
+                recv = messageQueue.recv(offset);
+            }
+
+            log.info(" ===>> batch: topic/cid/size = " + topic + "/" + consumerId + "/" + result.size());
+            log.info(" ===>> last message:{}", recv);
+        }
+        throw new RuntimeException("subscriptions not found for topic/consumerId = " + topic + "/" + consumerId);
     }
 
     public int send(Message<?> message) {
