@@ -1,3 +1,6 @@
 spring:
   application:
     name: ps-mq
+
+server:
+  port: 8765

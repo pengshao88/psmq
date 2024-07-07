@@ -19,9 +19,8 @@ public class MQServer {
 
     @RequestMapping("/send")
     public Result<String> send(@RequestParam("topic") String topic,
-                               @RequestParam("cid") String consumerId,
                                @RequestBody Message<String> message) {
-        return Result.ok("" + MessageQueue.send(topic, consumerId, message));
+        return Result.ok("" + MessageQueue.send(topic, message));
     }
 
     @RequestMapping("/recv")

@@ -1,4 +1,4 @@
-package cn.pengshao.mq.core;
+package cn.pengshao.mq.client;
 
 import cn.pengshao.mq.model.Message;
 

@@ -14,7 +14,7 @@ import java.util.Map;
 public class MessageQueue {
 
     public static final Map<String, MessageQueue> QUEUE_MAP = new HashMap<>();
-    private static final String TEST_TOPIC = "cn.pengshao.test";
+    public static final String TEST_TOPIC = "cn.pengshao.test";
     static {
         QUEUE_MAP.put(TEST_TOPIC, new MessageQueue(TEST_TOPIC));
     }
@@ -33,6 +33,7 @@ public class MessageQueue {
             return -1;
         }
 
+        message.getHeaders().put("X-offset", String.valueOf(index));
         queue[index++] = message;
         return index;
     }
@@ -70,7 +71,7 @@ public class MessageQueue {
         messageQueue.unsubscribe(subscription);
     }
 
-    public static int send(String topic, String consumerId, Message<String> message) {
+    public static int send(String topic, Message<String> message) {
         MessageQueue messageQueue = QUEUE_MAP.get(topic);
         if (messageQueue == null) {
             throw new RuntimeException("topic not found");
@@ -99,7 +100,7 @@ public class MessageQueue {
 
         if (messageQueue.subscriptions.containsKey(consumerId)) {
             int ind = messageQueue.subscriptions.get(consumerId).getOffset();
-            return messageQueue.recv(ind);
+            return messageQueue.recv(ind + 1);
         }
         throw new RuntimeException("subscriptions not found for topic/consumerId = "
                 + topic + "/" + consumerId);

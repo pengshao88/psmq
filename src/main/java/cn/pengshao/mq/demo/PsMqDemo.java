@@ -1,7 +1,9 @@
 package cn.pengshao.mq.demo;
 
-import cn.pengshao.mq.core.*;
+import cn.pengshao.mq.client.*;
 import cn.pengshao.mq.model.Message;
+import cn.pengshao.mq.server.MessageQueue;
+import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
 
@@ -15,22 +17,25 @@ public class PsMqDemo {
 
     public static void main(String[] args) throws IOException {
         long ids = 1;
-        String topic = "order";
-        PsBroker broker = new PsBroker();
-        broker.createMq(topic);
+        String topic = MessageQueue.TEST_TOPIC;
+        PsBroker broker = PsBroker.getDEFAULT();
 
         PsProducer producer = broker.createProducer();
-        for (int i = 0; i < 10; i++) {
-            Order order = new Order(ids, "item" + i, 100.0 * i);
-            producer.send("order", new Message<>(ids++, order, null));
-        }
-
         PsConsumer consumer = broker.createConsumer(topic);
         for (int i = 0; i < 10; i++) {
-            System.out.println("consume message=" + consumer.poll(1000));
+            Order order = new Order(ids, "item" + i, 100.0 * i);
+            producer.send(topic, new Message<>(ids++, JSON.toJSONString(order), null));
         }
-        consumer.addListener((PsListener<Order>)
-                message -> System.out.println("receive message=" + message));
+
+        for (int i = 0; i < 10; i++) {
+            Message message = consumer.recv(topic);
+            System.out.println("consume message=" + message);
+            consumer.ack(topic, message);
+        }
+//        consumer.listen(topic, message -> {
+//            // 这里处理消息
+//            System.out.println(" onMessage => " + message);
+//        });
 
         while (true) {
             char c = (char) System.in.read();
@@ -39,17 +44,22 @@ public class PsMqDemo {
             }
             if (c == 'p') {
                 Order order = new Order(ids, "item" + ids, 100 * ids);
-                producer.send(topic, new Message<>(ids ++, order, null));
+                producer.send(topic, new Message<>(ids++, JSON.toJSONString(order), null));
                 System.out.println("send ok => " + order);
             }
             if (c == 'c') {
-                Message<Order> message = consumer.poll(1000);
-                System.out.println("poll ok => " + message);
+                Message<Order> message = consumer.recv(topic);
+                if (message == null) {
+                    System.out.println("recv ok => message is null, topic=" + topic);
+                } else {
+                    System.out.println("recv ok => " + message);
+                    consumer.ack(topic, message);
+                }
             }
             if (c == 'a') {
                 for (int i = 0; i < 10; i++) {
                     Order order = new Order(ids, "item" + ids, 100 * ids);
-                    producer.send(topic, new Message<>(ids ++, order, null));
+                    producer.send(topic, new Message<>(ids++, JSON.toJSONString(order), null));
                 }
                 System.out.println("send 10 orders...");
             }

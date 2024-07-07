@@ -1,4 +1,4 @@
-package cn.pengshao.mq.core;
+package cn.pengshao.mq.client;
 
 import cn.pengshao.mq.model.Message;
 import lombok.AllArgsConstructor;
@@ -17,10 +17,6 @@ public class PsProducer {
     private PsBroker broker;
 
     public boolean send(String topic, Message message) {
-        PsMq psMq = broker.findMq(topic);
-        if (psMq == null) {
-            throw new RuntimeException("topic not found");
-        }
-        return psMq.send(message);
+        return broker.send(topic, message);
     }
 }
