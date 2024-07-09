@@ -1,4 +1,4 @@
-package cn.pengshao.mq.server;
+package cn.pengshao.mq.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class MessageSubscription {
+public class Subscription {
 
     private String topic;
     private String consumerId;

@@ -1,6 +1,8 @@
 package cn.pengshao.mq.server;
 
 import cn.pengshao.mq.model.Message;
+import cn.pengshao.mq.model.Stat;
+import cn.pengshao.mq.model.Subscription;
 import cn.pengshao.mq.model.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,15 +49,21 @@ public class MQServer {
     @RequestMapping("/sub")
     public Result<String> subscribe(@RequestParam("topic") String topic,
                               @RequestParam("cid") String consumerId) {
-        MessageQueue.sub(new MessageSubscription(topic, consumerId, -1));
+        MessageQueue.sub(new Subscription(topic, consumerId, -1));
         return Result.ok();
     }
 
     @RequestMapping("/unsub")
     public Result<String> unsubscribe(@RequestParam("topic") String topic,
                                 @RequestParam("cid") String consumerId) {
-        MessageQueue.unsub(new MessageSubscription(topic, consumerId, -1));
+        MessageQueue.unsub(new Subscription(topic, consumerId, -1));
         return Result.ok();
+    }
+
+    @RequestMapping("/stat")
+    public Result<Stat> stat(@RequestParam("topic") String topic,
+                             @RequestParam("cid") String consumerId) {
+        return Result.stat(MessageQueue.stat(topic, consumerId));
     }
 
 }

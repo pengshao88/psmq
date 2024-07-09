@@ -6,6 +6,7 @@ import cn.pengshao.common.thread.ThreadUtils;
 import cn.pengshao.mq.ResultCode;
 import cn.pengshao.mq.model.Message;
 import cn.pengshao.mq.model.Result;
+import cn.pengshao.mq.model.Stat;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import lombok.Getter;
@@ -111,5 +112,13 @@ public class PsBroker {
     private final MultiValueMap<String, PsConsumer<?>> consumers = new LinkedMultiValueMap<>();
     public void addConsumer(String topic, PsConsumer<?> consumer) {
         consumers.add(topic, consumer);
+    }
+
+    public Stat stat(String topic, String consumerId) {
+        log.info("====>>> stat topic/cid, {}/{}", topic, consumerId);
+        Result<Stat> result = HttpInvoker.httpGet(BROKER_URL + "/stat" + "?topic=" + topic + "&cid=" + consumerId,
+                new TypeReference<>() {});
+        log.info("====>>> stat result: {}", result);
+        return result.getData();
     }
 }

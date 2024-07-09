@@ -2,6 +2,7 @@ package cn.pengshao.mq.demo;
 
 import cn.pengshao.mq.client.*;
 import cn.pengshao.mq.model.Message;
+import cn.pengshao.mq.model.Stat;
 import cn.pengshao.mq.server.MessageQueue;
 import com.alibaba.fastjson.JSON;
 
@@ -28,7 +29,7 @@ public class PsMqDemo {
         }
 
         for (int i = 0; i < 10; i++) {
-            Message message = consumer.recv(topic);
+            Message<String> message = consumer.recv(topic);
             System.out.println("consume message=" + message);
             consumer.ack(topic, message);
         }
@@ -40,6 +41,7 @@ public class PsMqDemo {
         while (true) {
             char c = (char) System.in.read();
             if (c == 'q' || c == 'e') {
+                System.out.println(" [exit] : " + c );
                 break;
             }
             if (c == 'p') {
@@ -55,6 +57,10 @@ public class PsMqDemo {
                     System.out.println("recv ok => " + message);
                     consumer.ack(topic, message);
                 }
+            }
+            if (c == 's') {
+                Stat stat = consumer.stat(topic);
+                System.out.println(stat);
             }
             if (c == 'a') {
                 for (int i = 0; i < 10; i++) {

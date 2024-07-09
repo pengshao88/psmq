@@ -25,12 +25,12 @@ public class Message<T> {
     private Map<String, String> headers = new HashMap<>(); // 系统属性， X-version = 1.0
     //private Map<String, String> properties; // 业务属性
 
-    public static long getId() {
+    public static long nextId() {
         return idGenerate.getAndIncrement();
     }
 
-    public static Message<?> create(String body, Map<String, String> headers) {
-        return new Message<>(getId(), body, headers);
+    public static Message<String> create(String body, Map<String, String> headers) {
+        return new Message<>(nextId(), body, headers);
     }
 
 }

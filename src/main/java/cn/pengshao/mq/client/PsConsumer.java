@@ -1,6 +1,7 @@
 package cn.pengshao.mq.client;
 
 import cn.pengshao.mq.model.Message;
+import cn.pengshao.mq.model.Stat;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,5 +53,9 @@ public class PsConsumer<T> {
 
     @Getter
     private PsListener listener;
+
+    public Stat stat(String topic) {
+        return broker.stat(topic, id);
+    }
 
 }
