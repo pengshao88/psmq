@@ -48,7 +48,7 @@ public class Store {
                 StandardOpenOption.READ, StandardOpenOption.WRITE);
         mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, LEN);
 
-        // todo 1、读取索引
+        // todo 1、消费端 -> 读取索引
         // 判断是否有数据
         // 读前10位，转成int=len，看是不是大于0，往后翻len的长度，就是下一条记录，
         // 重复上一步，一直到0为止，找到数据结尾
@@ -103,8 +103,11 @@ public class Store {
         }
 
         readOnlyBuffer.position(entry.getOffset() + 10);
+        System.out.println(" read store -> " + readOnlyBuffer.position() + "/"
+                + entry.getOffset() + "/" + entry.getLength());
         int len = entry.length - 10;
         byte[] bytes = new byte[len];
+        readOnlyBuffer.get(bytes, 0, len);
         String json = new String(bytes, StandardCharsets.UTF_8);
         System.out.println(" read store data -> " + json);
         return JSON.parseObject(json, new TypeReference<>() {

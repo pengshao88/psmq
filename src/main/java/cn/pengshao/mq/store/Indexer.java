@@ -21,7 +21,7 @@ public class Indexer {
 
     public static void addEntry(String topic, int offset, int len) {
         System.out.println(" ===❀❀❀❀❀❀❀>>>> add entry(t/p/l):" + topic + "/" + offset + "/" + len);
-        Entry entry = new Entry(len, offset);
+        Entry entry = new Entry(offset, len);
         indexes.add(topic, entry);
         putMapping(topic, offset, entry);
     }
